@@ -7,7 +7,7 @@ RUN apk update && \
     apk add openssl
     # Onpenssl is a toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols.
 
-ADD nginx.conf /etx/nginx/nginx.conf
+ADD nginx.conf /etc/nginx/nginx.conf
 
 #Create certificate and public key
 RUN openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
