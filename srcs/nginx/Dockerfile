@@ -7,17 +7,18 @@ RUN apk update && \
     apk add openssl
     # Onpenssl is a toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols.
 
-ADD nginx.conf /etc/nginx/nginx.conf
-
+COPY nginx.conf /etc/nginx/sites-available/localhost
+RUN mkdir /etc/nginx/sits-enabled/
+RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sits-enabled/localhost
 #Create certificate and public key
 RUN openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
     -keyout /etc/ssl/private/nginx-cert.key -out /etc/ssl/certs/nginx-cert.crt
 
-ADD index.html /var/www/index.html
+COPY index.html /var/www/index.html
 
 COPY setup.sh /tmp/setup.sh
 RUN chmod +x /tmp/setup.sh
 
-EXPOSE 80 443
+VOLUME ["/sys/fs/cgroup"]
 
-#CMD ["sh", "/tmp/setup.sh"]
+EXPOSE 80 443
