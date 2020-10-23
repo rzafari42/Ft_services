@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-MAINTAINER = "rzafari rzafari@students.42.us.org"
+LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
 RUN apk update && \
     apk add nginx && \
