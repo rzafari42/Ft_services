@@ -40,6 +40,6 @@ RUN tar -xzvf ${WP_FILE} -C /var/www/ && \
     /var/www/wp-config-sample.php
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY worpress_config.php /var/www/wordpress/
+COPY wp_config.php /var/www/wordpress/
 
 EXPOSE 5050
