@@ -1,7 +1,14 @@
 #!/bin/sh
 #rm -rf /var/www/html/wordpress/
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+echo "kubectl is installed"
 kubectl delete --all deployment
-echo "lol"
 kubectl delete --all svc
 kubectl delete --all pods
 kubectl delete --all statefulset
