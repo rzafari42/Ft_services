@@ -1,21 +1,15 @@
-#!/bin/sh
-#rm -rf /var/www/html/wordpress/
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-sudo mv ./kubectl /usr/local/bin/kubectl
+#!/usr/bin/env zsh
 
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-echo "kubectl is installed"
-kubectl delete --all deployment
-kubectl delete --all svc
-kubectl delete --all pods
-kubectl delete --all statefulset
-kubectl delete --all pvc
-kubectl delete --all pv
+
+
+#kubectl delete --all deployment
+#kubectl delete --all svc
+#kubectl delete --all pods
+#kubectl delete --all statefulset
+#kubectl delete --all pvc
+#kubectl delete --all pv
 kubectl delete --all secret
-rm -rf /tmp/k8s_pvc/
+
 
 if ! which conntrack &>/dev/null; then # si y a pas le binaire de conntrack
 	sudo apt-get install -y conntrack
@@ -27,7 +21,9 @@ if ! kubectl version &> /dev/null; then
         echo "MIinikube ..."
 fi
 
-sudo chown -R user42 $HOME/.minikube
+
+sudo chown -R user42 $HOME/.kube $HOME/.minikube
+export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config
 
 # see what changes would be made, returns nonzero returncode if different
 echo "1111111111111111111"
