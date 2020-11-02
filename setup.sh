@@ -15,15 +15,17 @@ if ! which conntrack &>/dev/null; then # si y a pas le binaire de conntrack
 	sudo apt-get install -y conntrack
 fi
 
+
 if ! kubectl version &> /dev/null; then
         service nginx stop
-        sudo minikube start --driver=none
-        echo "MIinikube ..."
+       
+       echo "MIinikube ..."
+        sudo minikube start --driver=none  
 fi
-
 
 sudo chown -R user42 $HOME/.kube $HOME/.minikube
 export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config
+
 
 # see what changes would be made, returns nonzero returncode if different
 echo "1111111111111111111"
