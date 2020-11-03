@@ -36,4 +36,4 @@ RUN tar -xzvf $(PHPMYADMIN_FILE) -C /var/www/phpMyAdmin && \
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY Mypma_config.php /var/www/phpMyAdmin/
-EXPOSE 5000ss
+EXPOSE 5000
