@@ -40,7 +40,9 @@ spec:
 apiVersion: v1
 kind: Service #Permet d'identifiet le Pod ou Deployment associé et d'y apposer un port d'exposition. Il expose le port sur le Worker Node et le rend accessible.
 metadat:
-  name: nginx-service
+ labels:
+   app: nginx
+ name: nginx-service
 spec:
   selector:
       app: nginx
