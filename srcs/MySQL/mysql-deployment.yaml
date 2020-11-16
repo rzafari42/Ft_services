@@ -45,30 +45,30 @@ spec:
           image: mysql-image
           imagePullPolicy: Never
           env:
-          -name: WP_DB_HOST
-           valueFrom:
-             secretKeyRef:
-               name: wp-secret
-               key: host 
-        - name: WP_DB_NAME
-          valueFrom:
-            secretKeyRef:
-              name: wp-secret
-              key: name 
-        - name: WP_DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: wp-user
-              key: user
-        - name: WP_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: wp-password
-              key: password
-        ports:
+          - name: WP_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: wp-secret
+                key: host 
+          - name: WP_DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: wp-secret
+                key: name 
+          - name: WP_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: wp-user
+                key: user
+          - name: WP_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: wp-password
+                key: password
+          ports:
           - containerPort: 3306
             name: mysql
-        VolumeMounts:
+          VolumeMounts:
           - name: mysql-persistent-storage
             mountPath: /var/lib/mysql
       volumes:
