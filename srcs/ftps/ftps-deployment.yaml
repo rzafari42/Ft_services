@@ -38,12 +38,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: ftps-secret
-              key: USER
+              key: user
         - name: PASSWORD
           valueFrom:
             secretKeyRef:
               name: ftps-secret
-              key: PASSWORD
+              key: password
         ports:
         - containerPort: 21
         - containerPort: 30000

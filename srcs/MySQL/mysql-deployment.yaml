@@ -58,12 +58,12 @@ spec:
           - name: WP_DB_USER
             valueFrom:
               secretKeyRef:
-                name: wp-user
+                name: wp-secret
                 key: user
           - name: WP_DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: wp-password
+                name: wp-secret
                 key: password
           ports:
           - containerPort: 3306
