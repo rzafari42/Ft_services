@@ -47,5 +47,3 @@ spec:
         ports:
         - containerPort: 21
         - containerPort: 30000
-        volumeMounts:
-        - mount
