@@ -27,6 +27,7 @@ export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config
 #################################################
 ####            METALLB                      ####
 #################################################
+echo "MetlLB installation ..."
 
 # see what changes would be made, returns nonzero returncode if different
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
@@ -38,7 +39,6 @@ sed -e "s/strictARP: false/strictARP: true/" | \
 kubectl apply -f - -n kube-system
 
 #Install MetalLB by Manifest
-echo "MetlLB installation ..."
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.4/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.4/manifests/metallb.yaml
 # On first install only
