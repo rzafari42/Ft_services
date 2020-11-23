@@ -26,8 +26,8 @@ RUN apk update && \
     php7-bcmath \
     php7-mbstring \
     php7-dom \
+    php7-simplexml \
     php7-xmlreader \
-    php7-simplexm \
     mysql-client
 
 #We need to creat the folder /run/nginx to get nginx to work correctly so it can assign a PID number to the directory

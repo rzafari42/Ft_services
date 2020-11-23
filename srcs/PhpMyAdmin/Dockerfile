@@ -28,12 +28,12 @@ RUN apk update && \
 RUN mkdir -p /run/nginx 
 
 ENV PHPMYADMIN_VERSION 5.0.2
-ENV PHPMYADMIN_FILE phpMyAdmin-$(PHPMYADMIN_VERSION)-all-languages.tar.gz
-ADD http://files.directadmin.com/services/all/phpMyAdmin/$(PHPMYADMIN_FILE) .
-RUN tar -xzvf $(PHPMYADMIN_FILE) -C /var/www/phpMyAdmin && \
-    rm -rf s$(PHPMYADMIN_FILE) \
-    /var/www/phpMyAdmin/config.inc.php
-
+ENV PHPMYADMIN_FILE phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.gz
+ADD http://files.directadmin.com/services/all/phpMyAdmin/${PHPMYADMIN_FILE} .
+RUN tar -xf ${PHPMYADMIN_FILE} && \
+    mv ${PHPMYADMIN_FILE} /var/www/phpmyadmin && \
+    rm -rf s$(PHPMYADMIN_FILE) 
+    
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY Mypma_config.php /var/www/phpMyAdmin/
 EXPOSE 5000
