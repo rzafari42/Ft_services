@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb-Service
+spec:
+  type: ClusterIP
+  ports:
+  - name: influxdb
+    port: 8086
+    targetPort: 8086
+    protocol: TCP
+  selector:
+    app: influxdb
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb-pvc 
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2GI
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb-Deployment
+spec:
+  selector:
+    metadata:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: alpine_influxdb
+        imagePullPolicy: Never
+        env:
+        - name: INFLUXDB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: influxdb-secret 
+              key: influxdb_name 
+        - name: INFLUXDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: influxdb-secret
+              key: influxdb_user 
+        - name: INFLUXDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: influxdb-secret
+              key: influxdb_password 
+        ports:
+        - containerPort: 8086
+        volumeMounts:
+        - name: influxdb-persistent-storage
+          mountPath: /var/lib/influxdb
+      volumes:
+      - name: influxdb-persistent-storage
+        PersistentVolumeClaim:
+          claimName: influxdb-pvc
