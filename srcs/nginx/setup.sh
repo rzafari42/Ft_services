@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#service nginx stop
+service nginx stop
 echo "Welcome"
 docker build -t test .
 echo "startting nginx"

@@ -2,32 +2,32 @@
 
 
 
-#kubectl delete --all deployment
-#kubectl delete --all svc
-#kubectl delete --all pods
-#kubectl delete --all statefulset
-#kubectl delete --all pvc
-#kubectl delete --all pv
+kubectl delete --all deployment
+kubectl delete --all svc
+kubectl delete --all pods
+kubectl delete --all statefulset
+kubectl delete --all pvc
+kubectl delete --all pv
 kubectl delete --all secret
 
-
-if ! which contrack &>/dev/null; then # si y a pas le binaire de conntrack
+#Required to use driver none for kubernetes
+if ! which conntrack &>/dev/null; then
 	sudo apt-get install -y conntrack
 fi
 
 
 if ! kubectl version 2>/dev/null 1>&2 ; then
         service nginx stop       
-        sudo minikube start --driver=none  
-        sudo chown -R user42 $HOME/.kube $HOME/.minikube
+        echo "Minikube is about to start !"
+        sudo minikube start --driver=none  #driver none is required in any VM environment
 fi
 
-export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config
+sudo chown -R user42 $HOME/.kube $HOME/.minikube
 
 #################################################
 ####            METALLB                      ####
 #################################################
-echo "MetlLB installation ..."
+echo "Metallb is about to be installed !"
 
 # see what changes would be made, returns nonzero returncode if different
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
@@ -45,6 +45,19 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.4/manife
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f ./srcs/metallb/metallb-config.yaml
 
-#echo "About to build image ..."
-#docker build -t nginx nginx
-#echo "Image build with success"
+IP=$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p)
+echo "LoadBalancer IP : ${IP}"
+
+echo "Let's build every docker images ..."
+docker build -t nginx srcs/nginx
+docker build -t nginx srcs/PhpMyAdmin
+docker build -t nginx srcs/wordpress
+docker build -t nginx srcs/MySQL
+docker build -t nginx srcs/ftps
+docker build -t nginx srcs/Grafana
+docker build -t nginx srcs/InfluxDB
+
+
+
+
+
