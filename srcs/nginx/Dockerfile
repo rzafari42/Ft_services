@@ -19,4 +19,12 @@ COPY index.html /var/www/index.html
 RUN openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
     -keyout /etc/ssl/private/nginx-cert.key -out /etc/ssl/certs/nginx-cert.crt
 
+RUN apk update && apk upgrade && apk add --no-cahce vim supervisor wget curl && \
+    apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
+
 EXPOSE 80 443
+
+COPY ./supervisord.conf /etc/supervisord.conf
+
+COPY ./nginx.sh .
+ENTRYPOINT ./nginx.sh

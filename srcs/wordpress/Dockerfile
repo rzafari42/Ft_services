@@ -39,7 +39,14 @@ RUN tar -xzvf ${WP_FILE} -C /var/www/ && \
     rm -rf ${WP_FILE}  \
     /var/www/wp-config-sample.php
 
+RUN apk update && apk upgrade && apk add --no-cahce vim supervisor wget curl
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY wp_config.php /var/www/wordpress/
 
 EXPOSE 5050
+
+COPY ./supervisord.conf /etc/supervisord.conf
+
+COPY ./wp.sh .
+ENTRYPOINT ./wp.sh

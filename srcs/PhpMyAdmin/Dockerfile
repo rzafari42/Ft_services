@@ -34,6 +34,14 @@ RUN tar -xf ${PHPMYADMIN_FILE} && \
     mv ${PHPMYADMIN_FILE} /var/www/phpmyadmin && \
     rm -rf s$(PHPMYADMIN_FILE) 
     
+RUN apk update && apk upgrade && apk add --no-cahce vim supervisor wget curl
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY Mypma_config.php /var/www/phpMyAdmin/
+COPY Mypma_config.php /var/www/phpMyAdmin/config.inc.php
+
 EXPOSE 5000
+
+COPY ./supervisord.conf /etc/supervisord.conf
+
+COPY ./Mypma.sh  .
+ENTRYPOINT ./Mypma.sh

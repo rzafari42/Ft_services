@@ -49,15 +49,24 @@ IP=$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed
 echo "LoadBalancer IP : ${IP}"
 
 echo "Let's build every docker images ..."
+echo "nginx ..."
 docker build -t nginx srcs/nginx
+echo "PhpMyAdmin..."
 docker build -t nginx srcs/PhpMyAdmin
+echo "Wordpress..."
 docker build -t nginx srcs/wordpress
+echo "MySQL..."
 docker build -t nginx srcs/MySQL
+echo "FTPS..."
 docker build -t nginx srcs/ftps
+echo "Grafana..."
 docker build -t nginx srcs/Grafana
+echo "InfluxDB..."
 docker build -t nginx srcs/InfluxDB
 
 
 
 
-
+# Dachboard
+echo "Dashboard is about to be opened ..."
+sudo minikube dashboard
