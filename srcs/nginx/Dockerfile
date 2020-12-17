@@ -3,28 +3,30 @@ FROM alpine:latest
 LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
 RUN apk update && \
-    apk add openrc && \
     apk add nginx && \
     apk add openssl
     #Onpenssl is a toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols.
 
-RUN mkdir -p /run/nginx/
-COPY nginx.conf /etc/nginx/sites-available/localhost
-RUN mkdir /etc/nginx/sites-enabled/
-RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/localhost
+RUN mkdir var/run/nginx && \
+    mkdir -p /www
+    
+COPY ./index.html /www
 
-COPY index.html /var/www/index.html
+RUN mkdir -p /etc/nginx/ssl && openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
+    -keyout /etc/nginx/ssl/nginx-cert.key -out /etc/nginx/ssl/nginx-cert.crt
 
-#Certificate and public key
-RUN openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
-    -keyout /etc/ssl/private/nginx-cert.key -out /etc/ssl/certs/nginx-cert.crt
+RUN rm /etc/nginx/nginx.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
-RUN apk update && apk upgrade && apk add --no-cahce vim supervisor wget curl && \
-    apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
+#RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
+ #   apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
 
-EXPOSE 80 443
 
-COPY ./supervisord.conf /etc/supervisord.conf
+#COPY ./supervisord.conf /etc/supervisord.conf
 
-COPY ./nginx.sh .
+
+COPY nginx.sh .
+RUN chmod +x nginx.sh
+
+EXPOSE 80 443 
 ENTRYPOINT ./nginx.sh

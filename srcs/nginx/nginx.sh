@@ -6,4 +6,5 @@ export  user_pass=;
 adduser -D ${user};
 echo "$user:$user_pass" | chpasswd
 
-supervisord
+#supervisord
+/usr/sbin/nginx -g 'daemon off;'
