@@ -34,14 +34,14 @@ RUN apk update && \
 RUN mkdir -p /run/nginx 
 ENV WP_VERSION  5.5.1
 ENV WP_FILE wordpress-${WP_VERSION}.tar.gz
-ADD https://wordpress.org/${WP_FILE} .
-RUN tar -xzvf ${WP_FILE} -C /var/www/ && \
-    rm -rf ${WP_FILE}  \
-    /var/www/wp-config-sample.php
+RUN wget https://wordpress.org/${WP_FILE} .
+RUN tar -xzvf ${WP_FILE} -C /www && \
+    rm -rf ${WP_FILE}  &&\
+    rm /var/www/wp-config-sample.php
 
 RUN apk update && apk upgrade && apk add --no-cahce vim supervisor wget curl
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY wp_config.php /var/www/wordpress/
 
 EXPOSE 5050
