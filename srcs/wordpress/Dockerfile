@@ -32,14 +32,13 @@ RUN apk update && \
 
 #We need to creat the folder /run/nginx to get nginx to work correctly so it can assign a PID number to the directory
 RUN mkdir -p /run/nginx 
-ENV WP_VERSION  5.5.1
-ENV WP_FILE wordpress-${WP_VERSION}.tar.gz
-RUN wget https://wordpress.org/${WP_FILE} .
-RUN tar -xzvf ${WP_FILE} -C /www && \
-    rm -rf ${WP_FILE}  &&\
-    rm /var/www/wp-config-sample.php
-
-RUN apk update && apk upgrade && apk add --no-cahce vim supervisor wget curl
+ARG WP_VERSION="5.5.1"
+ARG WP_FILE="wordpress-${WP_VERSION}.tar.gz"
+RUN wget https://wordpress.org/${WP_FILE} && \
+    tar -xvf ${WP_FILE} && \
+    rm -rf ${WP_FILE} && \
+    mv wordpress /var/www
+RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY wp_config.php /var/www/wordpress/
