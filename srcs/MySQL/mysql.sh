@@ -9,3 +9,4 @@ db_init.sh & #launching the scrip which create the wordpress database and the us
 
 #Starting mysqld. mysqld_safe ensures that the mysqld daemon restart in case of crash
 /usr/bin/mysqld_safe --datadir="/var/lib/mysql/"
+ /usr/mysql-test ; perl mysql-test-run.pl

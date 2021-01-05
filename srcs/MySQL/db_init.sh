@@ -28,6 +28,6 @@ done
 mysql < $temp_file
 rm $temp_file
 
-exit
+
 
 
