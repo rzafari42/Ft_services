@@ -15,9 +15,8 @@ ENV __MYSQL_ADMIN_PASSWD__=user42
 
 COPY ./mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 COPY  ./mysql.sh . 
-#/usr/sbin/mysql.sh
 COPY ./db_init.sh .
-#/usr/sbin/db_init.sh
+
 
 RUN chmod +x ./mysql.sh
 RUN chmod +x ./db_init.sh

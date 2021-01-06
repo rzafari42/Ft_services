@@ -1,18 +1,17 @@
 [mysqld] #options for the server
-user=root
+user=mysql
 port=3306
 bind-address=0.0.0.0
-socket=/var/lib/mysql/mysql.sock
-log-bin=/var/lib/mysql/mysql-bin
+socket=/run/mysqld/mysql.sock
+#log-bin=/var/lib/mysql/mysql-bin
 log-basename=mysql_log_
-#skip-networking
+skip-networking=false
 
 [mysql] #options for the client
-
 port=3306
-socket=/var/lib/mysql/mysql.sock
+socket=/run/mysqld/mysql.sock
 
 
 [mysqld_safe]
 port=3306
-socket=/var/lib/mysql/mysql.sock
+socket=/run/mysqld/mysql.sock
