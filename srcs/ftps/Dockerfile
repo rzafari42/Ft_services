@@ -13,11 +13,10 @@ RUN openssl req -x509 -days 365 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafar
 ENV FTP_USERNAME=user42
 ENV FTP_PASSWORD=user42
 
-RUN echo 'Welcome on FTP server dear user !' > /hello.txt
-
+COPY ./hello.txt /home/hello.txt
 COPY ./vsftpd.conf /etc/vsftpd/vsftpd.conf
 COPY ./ftps.sh .
+RUN chmod +x ./ftps.sh
 
-run chmod +x ./ftps.sh
 EXPOSE 20 21 30000
 ENTRYPOINT ./ftps.sh

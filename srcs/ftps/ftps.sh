@@ -1,5 +1,5 @@
 #!/bin/sh
 
-adduser -D $FTP_USERNAME && echo "$FTP_USERNAME:$FTP_PASSWORD"
- 
+{ echo "$FTP_USERNAME";echo "$FTP_PASSWORD"; } | adduser $FTP_USERNAME
+
 usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf

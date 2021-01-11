@@ -13,12 +13,12 @@ ENV __MYSQL_DB_PASSWD_=user42
 ENV __MYSQL_ADMIN__=user42
 ENV __MYSQL_ADMIN_PASSWD__=user42
 
-COPY ./mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
-COPY  ./mysql.sh . 
+COPY ./my.cnf /etc/my.cnf.d/mariadb-server.cnf
+COPY  ./mysql.sh .
 COPY ./db_init.sh .
-
 
 RUN chmod +x ./mysql.sh
 RUN chmod +x ./db_init.sh
+
 EXPOSE 3306
 ENTRYPOINT  ./mysql.sh
