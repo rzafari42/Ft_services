@@ -3,7 +3,7 @@ FROM alpine:latest
 LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
 RUN apk update && \
-    apk add nginx && \
+    apk add --no-cache nginx && \
     apk add php-fpm \
     php7-fpm \
     php7-json \
@@ -31,21 +31,27 @@ RUN apk update && \
     mysql-client
 
 #We need to creat the folder /run/nginx to get nginx to work correctly so it can assign a PID number to the directory
-RUN mkdir -p /run/nginx 
-ARG WP_VERSION="5.5.1"
+RUN mkdir -p /run/nginx/
+ARG WP_VERSION="5.5"
 ARG WP_FILE="wordpress-${WP_VERSION}.tar.gz"
 RUN wget https://wordpress.org/${WP_FILE} && \
-    tar -xvf ${WP_FILE} && \
-    rm -rf ${WP_FILE} && \
-    mv wordpress /var/www
+    tar -xf ${WP_FILE} && \
+	rm -rf ${WP_FILE} && \
+    mv wordpress /var/www/
+    
+
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY wp_config.php /var/www/wordpress/
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp
+
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./wp_config.php /var/www/wordpress/
+COPY ./supervisord.conf /etc/supervisord.conf
 
 EXPOSE 5050
 
-COPY ./supervisord.conf /etc/supervisord.conf
-
-COPY ./wp.sh .
+COPY wp.sh ./wp.sh
+RUN chmod +x ./wp.sh
 ENTRYPOINT ./wp.sh
