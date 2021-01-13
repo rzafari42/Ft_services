@@ -3,7 +3,7 @@ FROM alpine:latest
 LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
 RUN apk update && \
-    apk add lighttpd \
+    apk add --no-cache nginx \
     php7-common \
     php7-iconv \
     php7-json \
@@ -25,23 +25,24 @@ RUN apk update && \
     php7-ctype \
     php7-dom
 
-RUN mkdir -p /run/nginx 
+RUN mkdir -p /run/nginx/
 
-ENV PHPMYADMIN_VERSION 5.0.2
-ENV PHPMYADMIN_FILE phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.gz
+ARG PHPMYADMIN_VERSION=5.0.2
+ARG PHPMYADMIN_FILE=phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.gz
 ADD http://files.directadmin.com/services/all/phpMyAdmin/${PHPMYADMIN_FILE} .
 RUN tar -xf ${PHPMYADMIN_FILE} && \
     mv ${PHPMYADMIN_FILE} /var/www/phpmyadmin && \
-    rm -rf s$(PHPMYADMIN_FILE) 
+    rm -rf $(PHPMYADMIN_FILE)
     
-RUN apk update && apk upgrade && apk add --no-cahce vim supervisor wget curl
+RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY Mypma_config.php /var/www/phpMyAdmin/config.inc.php
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./Mypma_config.php /var/www/phpMyAdmin/config.inc.php
 
 EXPOSE 5000
 
 COPY ./supervisord.conf /etc/supervisord.conf
 
 COPY ./Mypma.sh  .
+RUN chmod +x ./Mypma.sh
 ENTRYPOINT ./Mypma.sh

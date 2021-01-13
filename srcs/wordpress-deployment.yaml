@@ -45,22 +45,22 @@ spec:
           image: alpine-linux
           imagePullPolicy: Never
           env:
-          - name: WP_DB_HOST
+          - name: DB_HOST
             valueFrom:
               secretKeyRef:
                 name: wp-secret
                 key: host 
-          - name: WP_DB_NAME
+          - name: DB_NAME
             valueFrom:
               secretKeyRef:
                 name: wp-secret
                 key: name 
-          - name: WP_DB_USER
+          - name: DB_USER
             valueFrom:
               secretKeyRef:
                 name: wp-user
                 key: user
-          - name: WP_DB_PASSWORD
+          - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: wp-password
