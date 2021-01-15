@@ -6,10 +6,10 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repos
 RUN apk update && \
     apk add grafana --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
+RUN mkdir -p /var/log/supervisor/
+
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
     apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
-
-RUN mkdir -p /var/log/supervisor/
 
 COPY ./grafana.ini /usr/share/grafana/conf/custom.ini
 COPY ./influxdb.yaml /usr/share/grafana/conf/provisioning/datasources/
