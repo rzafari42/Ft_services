@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: phpmyadmin
-          image: phpmyadmin-image
+          image: phpmyadmin-img
           imagePullPolicy: Never
           env:
           - name: WP_DB_HOST

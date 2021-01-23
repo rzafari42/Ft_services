@@ -36,13 +36,13 @@ spec:
     matchLabels:
       app: mysql
   template:
-    metadate:
+    metadata:
       labels:
         app: mysql
     spec:
       containers:
         - name: mysql
-          image: mysql-image
+          image: mysql-img
           imagePullPolicy: Never
           env:
           - name: DB_HOST
@@ -68,7 +68,7 @@ spec:
           ports:
           - containerPort: 3306
             name: mysql
-          VolumeMounts:
+          volumeMounts:
           - name: mysql-persistent-storage
             mountPath: /var/lib/mysql
       volumes:

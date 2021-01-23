@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: influxdb
-  name: influxdb-Service
+  name: influxdb-service
 spec:
   type: ClusterIP
   ports:
@@ -32,10 +32,10 @@ kind: Deployment
 metadata:
   labels:
     app: influxdb
-  name: influxdb-Deployment
+  name: influxdb-deployment
 spec:
   selector:
-    metadata:
+    matchLabels:
       app: influxdb
   template:
     metadata:
@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
       - name: influxdb
-        image: alpine_influxdb
+        image: influxdb-img
         imagePullPolicy: Never
         env:
         - name: INFLUXDB_NAME
@@ -69,5 +69,5 @@ spec:
           mountPath: /var/lib/influxdb
       volumes:
       - name: influxdb-persistent-storage
-        PersistentVolumeClaim:
+        persistentVolumeClaim:
           claimName: influxdb-pvc

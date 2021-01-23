@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: alpine_nginx
+        image: nginx-img
         imagePullPolicy: Never
         ports:
         - containerPort: 80
@@ -34,8 +34,8 @@ spec:
             command:
             - /bin/ash
             - testpod.sh
-            initialDelaySeconds: 10
-            periodSeconds: 5
+          initialDelaySeconds: 10
+          periodSeconds: 5
 ---
 apiVersion: v1
 kind: Service #Permet d'identifiet le Pod ou Deployment associé et d'y apposer un port d'exposition. Il expose le port sur le Worker Node et le rend accessible.

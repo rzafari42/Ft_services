@@ -40,13 +40,20 @@ echo "LoadBalancer IP : ${LB_IP}"
 services=(wordpress mysql nginx phpmyadmin grafana influxdb ftps)
 
 #Set values for Database infos
-DB_NAME = Wordpress; DB_HOST=mysql; DB_USER=rzafari; DB_PASSWORD=rzafari;
+DB_NAME=Wordpress; DB_HOST=mysql; DB_USER=rzafari; DB_PASSWORD=rzafari;
 
 ###################################################
 
-#let's build our services
+#Let's build our services
 for service in $services
 do
         echo "Building $service\n"
-        docker build --tag $service ./srcs/$service/ >/dev/null
+        docker build --tag $service-img ./srcs/$service/ >/dev/null
+done
+
+#Let's deploy our services
+for service in $services
+do
+        echo "Deploying $service\n"
+        kubectl create -f ./srcs/$service-deployment.yaml
 done

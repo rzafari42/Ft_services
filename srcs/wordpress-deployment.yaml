@@ -42,7 +42,7 @@ spec:
     spec:
       containers:
         - name: wordpress
-          image: alpine-linux
+          image: wordpress-img
           imagePullPolicy: Never
           env:
           - name: DB_HOST
@@ -66,11 +66,11 @@ spec:
                 name: wp-password
                 key: password
           ports:
-            - containerPport: 5050
+            - containerPort: 5050
               name: wordpress
           volumeMounts:
             - name: wordpress-persistent-storage
-              mountpath: var/www/html
+              mountPath: var/www/html
       volumes:
         - name: wordpress-persistent-storage
           persistentVolumeClaim:
