@@ -1,13 +1,15 @@
 #!/usr/bin/env zsh
 
-#
+if ! which conntrack &>/dev/null; then
+        sudo apt-get install -y conntrack
+fi 
 
 if ! kubectl version 2>/dev/null 1>&2 ; then
         service nginx stop
         sudo minikube start --driver=none
 fi
-sudo mv /home/user42/.kube /home/user42/.minikube $HOME
-sudo chwon -R $USER $HOME/.kube $HOME/.minikube
+
+sudo chown -R $USER $HOME/.kube $HOME/.minikube
 #################################################
 ####            METALLB                      ####
 #################################################
@@ -46,5 +48,5 @@ DB_NAME = Wordpress; DB_HOST=mysql; DB_USER=rzafari; DB_PASSWORD=rzafari;
 for service in $services
 do
         echo "Building $service\n"
-        docker build --tag ./srcs/$service/
+        docker build --tag $service ./srcs/$service/ >/dev/null
 done
