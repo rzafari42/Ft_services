@@ -1,45 +1,6 @@
-#ressources used to produce yaml files:
-# https://blog.ineat-group.com/2019/10/presentation-de-kubernetes/
-# https://kubernetes.io/fr/docs/concepts/workloads/pods/pod-lifecycle/#politique-de-redemarage
-# https://kubernetes.io/fr/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-# https://cloud.google.com/kubernetes-engine/docs/concepts/service?hl=fr
-apiVersion : apps/v1
-kind: Deployment #surccouche au Pod permettant l'ajout de fonctionnalités
-#metadata: Données complémentaires à passer à notre objet, 
-#le seul champs nécessaires est "name" pour décrire le nom de notre objet
-metadata:
-  name: nginx-deployment
-  labels:
-    app: nginx
-#spec: description complète de notre objet Kubernetes
-spec:
-  selector: #defini comment le Deployment trouve chaque pods à controller
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    #template.spec indique que le Pod fait marcher 1 container (nginx)
-    spec:
-      containers:
-      - name: nginx
-        image: nginx-img
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 80
-        - containerPort: 443
-        livenessProbe:
-          exec:
-            command:
-            - /bin/ash
-            - testpod.sh
-          initialDelaySeconds: 10
-          periodSeconds: 5
----
 apiVersion: v1
-kind: Service #Permet d'identifiet le Pod ou Deployment associé et d'y apposer un port d'exposition. Il expose le port sur le Worker Node et le rend accessible.
-metadat:
+kind: Service
+metadata:
  labels:
    app: nginx
  name: nginx-service
@@ -48,10 +9,41 @@ spec:
       app: nginx
   type: LoadBalancer
   ports:
-  -name: http
-   port: 80
-   targetPort: 80
-  -name: https
-   port: 443
-   targetPort: 443
-  
+  - port: 80
+    name: http
+    targetPort: 80
+  - port: 443
+    name: https
+    targetPort: 443
+
+---
+
+apiVersion : apps/v1
+kind: Deployment 
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  selector: 
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx-img
+        imagePullPolicy: Never
+        ports:
+          - containerPort: 80
+          - containerPort: 443
+        livenessProbe:
+          exec:
+            command:
+            - /bin/ash
+            - testpod.sh
+          initialDelaySeconds: 10
+          periodSeconds: 5

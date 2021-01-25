@@ -19,7 +19,7 @@ echo "Metallb is about to be installed !"
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
 sed -e "s/strictARP: false/strictARP: true/" | \
 kubectl diff -f - -n kube-system
-echo "done"
+
 # actually apply the changes, returns nonzero returncode on errors only
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
 sed -e "s/strictARP: false/strictARP: true/" | \
@@ -45,15 +45,16 @@ DB_NAME=Wordpress; DB_HOST=mysql; DB_USER=rzafari; DB_PASSWORD=rzafari;
 ###################################################
 
 #Let's build our services
+echo ""
 for service in $services
 do
-        echo "Building $service\n"
+        echo "Building $service"
         docker build --tag $service-img ./srcs/$service/ >/dev/null
 done
 
 #Let's deploy our services
 for service in $services
 do
-        echo "Deploying $service\n"
+        echo "Deploying $service"
         kubectl create -f ./srcs/$service-deployment.yaml
 done
