@@ -35,26 +35,36 @@ kubectl apply -f ./srcs/metallb-conf.yaml
 LB_IP=$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p)
 echo "LoadBalancer IP : ${LB_IP}"
 
-#################################################
+##################################################
 
 services=(wordpress mysql nginx phpmyadmin grafana influxdb ftps)
 
 #Set values for Database infos
 DB_NAME=Wordpress; DB_HOST=mysql; DB_USER=rzafari; DB_PASSWORD=rzafari;
+###################################################
+#Create the necessary secrets
+echo "Creating secrets..."
+kubectl create secret generic db-user-pass \
+        --from-literal=name=${DB_NAME} \
+        --from-literal=host=${DB_HOST} \
+        --from-literal=user=${DB_USER} \
+        --from-literal=password=${DB_PASSWORD}
 
+kubectl create secret generic user \
+        --from-literal=user=rzafari \
+        --from-literal=password=idontknwo
+echo "Secret created"
 ###################################################
 
-#Let's build our services
+#Let's build and deploy our services
 echo ""
 for service in $services
 do
         echo "Building $service"
         docker build --tag $service-img ./srcs/$service/ >/dev/null
+        echo "Deploying $service"
+        kubectl apply -f ./srcs/$service-deployment.yaml
 done
 
-#Let's deploy our services
-for service in $services
-do
-        echo "Deploying $service"
-        kubectl create -f ./srcs/$service-deployment.yaml
-done
+
+sudo minikube dashboard
