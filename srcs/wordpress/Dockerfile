@@ -40,7 +40,8 @@ RUN wget https://wordpress.org/${WP_FILE} && \
     mv wordpress /var/www/
     
 
-RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl
+RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
+    apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
@@ -48,10 +49,11 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./wp_config.php /var/www/wordpress/
-COPY ./supervisord.conf /etc/supervisord.conf
 
-EXPOSE 5050
-
+RUN mkdir -p /var/log/supervisor/
+COPY ./supervisord.conf /etc/
 COPY wp.sh ./wp.sh
 RUN chmod +x ./wp.sh
+
+EXPOSE 5050
 ENTRYPOINT ./wp.sh

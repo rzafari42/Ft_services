@@ -15,8 +15,9 @@ COPY ./grafana.ini /usr/share/grafana/conf/custom.ini
 COPY ./influxdb.yaml /usr/share/grafana/conf/provisioning/datasources/
 COPY ./dashboard.yaml /usr/share/grafana/conf/provisioning/dashboards/
 COPY ./dashboards /var/lib/grafana/dashboards/
-COPY ./supervisord.conf /etc/
 
+RUN mkdir -p /var/log/supervisor/
+COPY ./supervisord.conf /etc/
 COPY ./grafana.sh .
 RUN chmod +x ./grafana.sh
 

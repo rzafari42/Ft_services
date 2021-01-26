@@ -20,15 +20,16 @@ RUN wget http://files.directadmin.com/services/all/phpMyAdmin/${PMA_FILE}.tar.gz
     mv ${PMA_FILE} /var/www/phpMyAdmin && \
     rm -rf $(PMA_FILE)
     
-RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl
+RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
+    apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./Mypma_config.php /var/www/phpMyAdmin/config.inc.php
 
-EXPOSE 5000
-
-COPY ./supervisord.conf /etc/supervisord.conf
-
+RUN mkdir -p /var/log/supervisor/
+COPY ./supervisord.conf /etc/
 COPY ./Mypma.sh  .
 RUN chmod +x ./Mypma.sh
+
+EXPOSE 5000
 ENTRYPOINT ./Mypma.sh
