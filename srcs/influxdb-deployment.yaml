@@ -24,7 +24,7 @@ metadata:
   name: influxdb-pvc 
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 2Gi
@@ -32,12 +32,13 @@ spec:
 ---
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     app: influxdb
   name: influxdb-deployment
 spec:
+  serviceName: influxdb
   selector:
     matchLabels:
       app: influxdb
@@ -49,23 +50,7 @@ spec:
       containers:
       - name: influxdb
         image: influxdb-img
-        imagePullPolicy: Never
-        env:
-        - name: INFLUXDB_NAME
-          valueFrom:
-            secretKeyRef:
-              name: influxdb-secret 
-              key: influxdb_name 
-        - name: INFLUXDB_USER
-          valueFrom:
-            secretKeyRef:
-              name: influxdb-secret
-              key: influxdb_user 
-        - name: INFLUXDB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: influxdb-secret
-              key: influxdb_password 
+        imagePullPolicy: Never 
         ports:
         - containerPort: 8086
         volumeMounts:

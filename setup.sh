@@ -1,19 +1,25 @@
 #!/usr/bin/env zsh
 
 if ! which conntrack &>/dev/null; then
-        sudo apt-get install -y conntrack
-fi 
-
-if ! kubectl version 2>/dev/null 1>&2 ; then
-        service nginx stop
-        sudo minikube start --driver=none
+    sudo apt-get install -y conntrack
 fi
 
-sudo chown -R $USER $HOME/.kube $HOME/.minikube
-#################################################
-####            METALLB                      ####
-#################################################
-echo "Metallb is about to be installed !"
+if ! kubectl version &>/dev/null; then
+    service nginx stop
+    echo "Starting minikube..."
+    sudo minikube start --driver=none
+fi
+
+echo "Cleaning environment..."
+kubectl delete --all deployment
+kubectl delete --all svc
+kubectl delete --all pods
+kubectl delete --all statefulset
+kubectl delete --all pvc
+kubectl delete --all pv
+kubectl delete --all secret
+
+sudo chown -R user42 $HOME/.kube $HOME/.minikube
 
 # see what changes would be made, returns nonzero returncode if different
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
@@ -25,54 +31,47 @@ kubectl get configmap kube-proxy -n kube-system -o yaml | \
 sed -e "s/strictARP: false/strictARP: true/" | \
 kubectl apply -f - -n kube-system
 
-#Install MetalLB by Manifestsssss
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.4/manifests/namespace.yaml
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.4/manifests/metallb.yaml
+#Install MetalLB by Manifests
+echo "Installing MetalLB ..."
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
 # On first install only
-kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
-kubectl apply -f ./srcs/metallb-conf.yaml
+kubectl create secret generic -n metallb-system memberlist \
+--from-literal=secretkey="$(openssl rand -base64 128)"
+kubectl delete -f ./srcs/metallb-conf.yaml; kubectl apply -f ./srcs/metallb-conf.yaml
 #Catch the LB IP and print it
-LB_IP=$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p)
-echo "LoadBalancer IP : ${LB_IP}"
-kubectl apply -k ./srcs/
-
-##################################################
-
-services=(wordpress mysql nginx phpmyadmin grafana influxdb ftps)
+IP=$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p)
+echo "IP : ${IP}"
 
 #Set values for Database infos
-DB_NAME=Wordpress; DB_HOST=mysql; DB_USER=rzafari; DB_PASSWORD=rzafari;
-###################################################
-#Create the necessary secrets
-echo "Creating secrets..."
-kubectl delete secret/db-user-pass 2>/dev/null 1>&2
-kubectl delete secret/user 2>/dev/null 1&>2
-kubectl create secret generic db-user-pass \
+echo "Let's build the images ..."
+
+services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
+
+for service in $services
+do
+    docker build -t $service-img srcs/$service
+done
+
+DB_NAME=wordpress; DB_USER=wp_user; DB_PASSWORD=password; DB_HOST=mysql;
+GRAFANA_USER=rzafari; GRAFANA_PASSWORD=idontknow;
+
+echo "Let's build the secrets ..."
+kubectl create secret generic db-id-user \
         --from-literal=name=${DB_NAME} \
-        --from-literal=host=${DB_HOST} \
         --from-literal=user=${DB_USER} \
-        --from-literal=password=${DB_PASSWORD}
+        --from-literal=password=${DB_PASSWORD} \
+        --from-literal=host=${DB_HOST}
 
-kubectl create secret generic user \
-        --from-literal=user=rzafari \
-        --from-literal=password=idontknwo
-echo "Secret created"
-###################################################
-echo "Deleting old services..."
+kubectl create secret generic rzafari \
+   --from-literal=user=${GRAFANA_USER} \
+   --from-literal=password=${GRAFANA_PASSWORD}
+
+echo "Let's create and deploys services ..."
 for service in $services
 do
-        kubectl delete -f ./srcs/$service-deployment.yaml 2>/dev/null 1>&2
-done
-#Let's build and deploy our services
-echo ""
-for service in $services
-do
-        echo "Building $service"
-        docker build --tag $service-img ./srcs/$service/ >/dev/null
-        echo "Deploying $service"
-        kubectl create -f ./srcs/$service-deployment.yaml
+    kubectl create -f ./srcs/$service-deployment.yaml
 done
 
-
-echo "Launching the dashboard..."
+echo "About to open the dashboard ..."
 sudo minikube dashboard

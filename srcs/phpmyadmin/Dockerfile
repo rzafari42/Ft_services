@@ -2,7 +2,7 @@ FROM alpine:latest
 
 LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
-RUN apk update && apk add --no-cache nginx \
+RUN apk update && apk add nginx --no-cache \
 	php7-fpm php7-mcrypt php7-session php7-soap php7-openssl php7-gmp \
 	php7-pdo_odbc php7-json php7-dom php7-pdo php7-zip php7-mysqli \
 	php7-sqlite3 php7-apcu php7-pdo_pgsql php7-bcmath php7-gd php7-odbc \
@@ -26,7 +26,7 @@ RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./Mypma_config.php /var/www/phpMyAdmin/config.inc.php
 
-RUN mkdir -p /var/log/supervisor/
+#RUN mkdir -p /var/log/supervisor/
 COPY ./supervisord.conf /etc/
 COPY ./Mypma.sh  .
 RUN chmod +x ./Mypma.sh

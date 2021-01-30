@@ -20,7 +20,7 @@ spec:
 ---
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: ftps-deployment
   labels:
@@ -38,17 +38,6 @@ spec:
       - name: ftps
         image: ftps-img
         imagePullPolicy: Never
-        env:
-        - name: FTP_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: rzafari
-              key: user42
-        - name: FTP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: rzafari
-              key: user42
         ports:
         - containerPort: 21
-        - containerPort: 30000 
+        - containerPort: 30000

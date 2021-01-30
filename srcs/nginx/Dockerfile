@@ -23,8 +23,8 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir -p /var/log/supervisor/
 COPY ./supervisord.conf /etc/
-COPY nginx.sh .
-RUN chmod +x nginx.sh
+COPY ./nginx.sh .
+RUN chmod +x ./nginx.sh
 
 EXPOSE 80 443 
 ENTRYPOINT ./nginx.sh
