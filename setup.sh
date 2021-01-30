@@ -45,13 +45,13 @@ echo "IP : ${IP}"
 
 #Set values for Database infos
 echo "Let's build the images ..."
-
 services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
 
 for service in $services
 do
-    docker build -t $service-img srcs/$service
+    docker build -t $service-img srcs/$service 2>/dev/null 1>&2
 done
+echo "Images are built !"
 
 DB_NAME=wordpress; DB_USER=wp_user; DB_PASSWORD=password; DB_HOST=mysql;
 GRAFANA_USER=rzafari; GRAFANA_PASSWORD=idontknow;
@@ -66,12 +66,14 @@ kubectl create secret generic db-id-user \
 kubectl create secret generic rzafari \
    --from-literal=user=${GRAFANA_USER} \
    --from-literal=password=${GRAFANA_PASSWORD}
+echo "Secrets are built !"
 
 echo "Let's create and deploys services ..."
 for service in $services
 do
-    kubectl create -f ./srcs/$service-deployment.yaml
+    kubectl create -f ./srcs/$service-deployment.yaml 2>/dev/null 1>&2
 done
+echo "Done ! :)"
 
 echo "About to open the dashboard ..."
 sudo minikube dashboard
