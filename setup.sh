@@ -10,7 +10,7 @@ if ! kubectl version &>/dev/null; then
     sudo minikube start --driver=none
 fi
 
-echo "Cleaning environment..."
+echo "Let's delete some old things ..."
 kubectl delete --all deployment
 kubectl delete --all svc
 kubectl delete --all pods

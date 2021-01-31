@@ -1,18 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    run: phpmyadmin
   name: phpmyadmin-service
+  labels:
+    app: phpmyadmin
 spec:
   selector:
-    run: phpmyadmin
+    app: phpmyadmin
   type: LoadBalancer
   ports:
-  - port: 5000
-    name: phpmyadmin
+  - name: phpmyadmin
+    port: 5000
     targetPort: 5000
-
+  
 ---
 
 apiVersion: apps/v1
@@ -20,15 +20,16 @@ kind: StatefulSet
 metadata:
   name: phpmyadmin-deployment
   labels:
-    run: phpmyadmin
+    app: phpmyadmin
 spec:
+  serviceName: phpmyadmin
   selector:
     matchLabels:
-      run: phpmyadmin
+      app: phpmyadmin
   template:
     metadata:
       labels:
-        run: phpmyadmin
+        app: phpmyadmin
     spec:
       containers:
       - name: phpmyadmin

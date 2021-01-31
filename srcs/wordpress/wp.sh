@@ -9,6 +9,7 @@ then
         mkdir -p /var/www/html/
 fi
 
+rm -rf /var/www/html/wordpress
 mv /var/www/wordpress/ /var/www/html
 
 supervisord

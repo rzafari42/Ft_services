@@ -13,21 +13,20 @@ RUN apk update && apk add nginx --no-cache \
 
 RUN mkdir -p /run/nginx/
 
-ARG PMA_VERSION=5.0.2
-ARG PMA_FILE="phpMyAdmin-${PMA_VERSION}-all-languages"
+ARG PMA_FILE="phpMyAdmin-5.0.2-all-languages"
 RUN wget http://files.directadmin.com/services/all/phpMyAdmin/${PMA_FILE}.tar.gz && \
     tar -xf ${PMA_FILE}.tar.gz && \
-    mv ${PMA_FILE} /var/www/phpMyAdmin && \
+    mv ${PMA_FILE} /var/www/phpmyadmin && \
     rm -rf $(PMA_FILE)
     
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
     apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./Mypma_config.php /var/www/phpMyAdmin/config.inc.php
+COPY ./Mypma_config.php /var/www/phpmyadmin/config.inc.php
 
 #RUN mkdir -p /var/log/supervisor/
-COPY ./supervisord.conf /etc/
+COPY ./supervisord.conf /etc/supervisord.conf
 COPY ./Mypma.sh  .
 RUN chmod +x ./Mypma.sh
 
