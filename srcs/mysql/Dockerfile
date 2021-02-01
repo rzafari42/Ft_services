@@ -1,21 +1,24 @@
-FROM alpine:latest
+FROM alpine:3.12.3
 
-LABEL maintainer="rzafari <rzafari@students.42.us.org>"
+WORKDIR /tmp
 
-RUN apk update && \
-    apk add mysql mysql-client --no-cache
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+RUN apk update && apk add mariadb mariadb-common mariadb-client openrc --no-cache
+
+COPY ./supervisord.conf /etc/
+COPY ./my.cnf /etc/my.cnf.d/mariadb-server.cnf
+# COPY ./users.sql .
+# COPY ./wordpress.sql .
+
+RUN rmdir /var/lib/mysql/
+RUN mkdir -p /var/log/supervisor/
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
-    apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
-    
-COPY ./my.cnf /etc/my.cnf.d/mariadb-server.cnf
-COPY  ./mysql.sh .
-COPY ./db_init.sh .
-
-RUN mkdir -p /var/log/supervisor/
-COPY ./supervisord.conf /etc/
-RUN chmod +x ./mysql.sh
-RUN chmod +x ./db_init.sh
+	apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 EXPOSE 3306
-ENTRYPOINT  ./mysql.sh
+
+COPY mysql.sql ./mysql.sql
+COPY mysql.sh ./mysql.sh
+RUN chmod +x ./mysql.sh
+ENTRYPOINT ./mysql.sh

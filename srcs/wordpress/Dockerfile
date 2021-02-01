@@ -1,59 +1,39 @@
-FROM alpine:latest
+FROM alpine:3.12.3
 
-LABEL maintainer="rzafari <rzafari@students.42.us.org>"
+WORKDIR /tmp
 
-RUN apk update && \
-    apk add --no-cache nginx && \
-    apk add php-fpm \
-    php7-fpm \
-    php7-json \
-    php7-zlib \
-    php7-xml \
-    php7-pdo \
-    php7-phar \
-    php7-openssl \
-    php7-pdo_mysql \
-    php7-mysqli \
-    php7-session \
-    php7-gd \
-    php7-iconv \
-    php7-mcrypt \
-    php7-curl \
-    php7-opcache \
-    php7-ctype \
-    php7-apcu \
-    php7-intl \
-    php7-bcmath \
-    php7-mbstring \
-    php7-dom \
-    php7-simplexml \
-    php7-xmlreader \
-    mysql-client
-
-#We need to creat the folder /run/nginx to get nginx to work correctly so it can assign a PID number to the directory
+# Nginx
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+RUN apk update && apk add --no-cache nginx \
+	php7-fpm php7-mcrypt php7-session php7-soap php7-openssl php7-gmp \
+	php7-pdo_odbc php7-json php7-dom php7-pdo php7-zip php7-mysqli \
+	php7-sqlite3 php7-apcu php7-pdo_pgsql php7-bcmath php7-gd php7-odbc \
+	php7-pdo_mysql php7-pdo_sqlite php7-gettext php7-xmlreader \
+	php7-xmlrpc php7-bz2 php7-iconv php7-pdo_dblib php7-curl php7-ctype \
+	php7-opcache php7-zlib mysql-client
 RUN mkdir -p /run/nginx/
-ARG WP_VERSION="5.5"
-ARG WP_FILE="wordpress-${WP_VERSION}.tar.gz"
+
+# Installing wordpress packaging
+ARG VERSION="wordpress-5.5"
+ARG WP_FILE="${VERSION}.tar.gz"
 RUN wget https://wordpress.org/${WP_FILE} && \
-    tar -xf ${WP_FILE} && \
-	rm -rf ${WP_FILE} && \
-    mv wordpress /var/www/
-    
+	tar -xf ${WP_FILE} && \
+	mv wordpress /var/www/ && \
+	rm -rf ${WP_FILE}
 
-RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
-    apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl
 
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-    chmod +x wp-cli.phar && \
-    mv wp-cli.phar /usr/local/bin/wp
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	&& chmod +x wp-cli.phar \
+	&& mv wp-cli.phar /usr/local/bin/wp
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./wp_config.php /var/www/wordpress/
-
-RUN mkdir -p /var/log/supervisor/
+COPY ./wordpress_config.php /var/www/wordpress/
 COPY ./supervisord.conf /etc/
-COPY wp.sh ./wp.sh
-RUN chmod +x ./wp.sh
+# RUN chown -R www-data:www-data /var/www/html/wordpress/
 
 EXPOSE 5050
-ENTRYPOINT ./wp.sh
+
+COPY wordpress.sh ./wordpress.sh
+RUN chmod +x ./wordpress.sh
+CMD sh ./wordpress.sh

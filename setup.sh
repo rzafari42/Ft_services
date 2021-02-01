@@ -53,7 +53,7 @@ do
 done
 echo "Images are built !"
 
-DB_NAME=wordpress; DB_USER=wp_user; DB_PASSWORD=password; DB_HOST=mysql;
+DB_NAME=wordpress; DB_USER=wp_user; DB_PASSWORD=password; DB_HOST=mysql-service;
 GRAFANA_USER=rzafari; GRAFANA_PASSWORD=idontknow;
 
 echo "Let's build the secrets ..."

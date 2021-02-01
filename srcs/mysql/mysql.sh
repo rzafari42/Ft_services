@@ -1,16 +1,32 @@
 #!/bin/sh
 
-mkdir -p /run/mysqld && \
-chown -R mysql:mysql /run/mysqld
+mysql_install_db --ldata=/var/lib/mysql
+sleep 5
+mysqld --default-authentication-plugin=mysql_native_password &
+sleep 5
+#mysqld
+tmpsql="/tmp/init_sql"
+echo > $tmpsql \
+"CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+CREATE USER IF NOT EXISTS ${DB_USER} IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
+FLUSH PRIVILEGES;
+GRANT ALL ON *.* TO '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}' WITH GRANT OPTION;
+GRANT ALL ON *.* TO '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON *.* TO '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}' WITH GRANT OPTION;
+FLUSH PRIVILEGES;"
 
+if [ ! -f /var/lib/mysql/wpNewUsers ]; then
+	echo "done" >> /var/lib/mysql/wpNewUsers
+	mysql -h localhost -e "$(cat $tmpsql)"
+	mysql -h localhost -e "$(cat ./mysql.sql)"
+	#mysql -h localhost -e "$(cat ./new_users.sql)"
+fi
 
-mysql_install_db --user=mysql --datadir=/var/lib/mysql/ #it creates the data directory and build the tables
+rm -f $tmpsql
 
-#launching the scrip which create the wordpress database and the user (all of that in the background)
-nohup db_init.sh &#>/dev/null 2>&1 &
-
-#Starting mysqld. mysqld_safe ensures that the mysqld daemon restart in case of crash
-/usr/bin/mysqld_safe --datadir="/var/lib/mysql/"
-cd '/usr/mysql-test' ; perl mysql-test-run.pl
+/usr/share/mariadb/mysql.server stop
 
 supervisord
