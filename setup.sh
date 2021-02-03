@@ -5,10 +5,13 @@ if ! which conntrack &>/dev/null; then
 fi
 
 if ! kubectl version &>/dev/null; then
-    service nginx stop
+    sudo service nginx stop
     echo "Starting minikube..."
     sudo minikube start --driver=none
 fi
+
+sudo chown -R user42 $HOME/.kube $HOME/.minikube
+
 
 echo "Let's delete some old things ..."
 kubectl delete --all deployment
@@ -19,7 +22,7 @@ kubectl delete --all pvc
 kubectl delete --all pv
 kubectl delete --all secret
 
-sudo chown -R user42 $HOME/.kube $HOME/.minikube
+
 
 # see what changes would be made, returns nonzero returncode if different
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
@@ -71,7 +74,9 @@ echo "Secrets are built !"
 echo "Let's create and deploys services ..."
 for service in $services
 do
+    echo "$service ..."
     kubectl create -f ./srcs/$service-deployment.yaml 2>/dev/null 1>&2
+    echo "$service done"
 done
 echo "Done ! :)"
 

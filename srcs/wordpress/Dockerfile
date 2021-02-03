@@ -30,10 +30,9 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./wordpress_config.php /var/www/wordpress/
 COPY ./supervisord.conf /etc/
+COPY  wordpress.sh ./wordpress.sh
+RUN	chmod +x ./wordpress.sh
 # RUN chown -R www-data:www-data /var/www/html/wordpress/
 
 EXPOSE 5050
-
-COPY wordpress.sh ./wordpress.sh
-RUN chmod +x ./wordpress.sh
-CMD sh ./wordpress.sh
+ENTRYPOINT ./wordpress.sh
