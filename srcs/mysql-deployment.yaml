@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: mysql
+    run: mysql
   name: mysql-service
 spec:
   type: ClusterIP
@@ -11,7 +11,7 @@ spec:
     port: 3306
     protocol: TCP
   selector:
-    app: mysql
+    run: mysql
 
 ---
 
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    app: mysql
+    run: mysql
   name: mysql-pv-claim
 spec:
   accessModes:
@@ -34,17 +34,17 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    app: mysql
+    run: mysql
   name: mysql
 spec:
   serviceName: mysql
   selector:
     matchLabels:
-      app: mysql
+      run: mysql
   template:
     metadata:
       labels:
-        app: mysql
+        run: mysql
     spec:
       containers:
       - name: mysql

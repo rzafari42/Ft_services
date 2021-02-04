@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: ftps-service
   labels:
-    app: ftps
+    run: ftps
 spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.99.102
@@ -15,7 +15,7 @@ spec:
     protocol: TCP
     name: my-ftps
   selector:
-    app: ftps
+    run: ftps
 
 ---
 
@@ -24,15 +24,15 @@ kind: StatefulSet
 metadata:
   name: ftps-deployment
   labels:
-    app: ftps
+    run: ftps
 spec:
   selector:
     matchLabels:
-      app: ftps
+      run: ftps
   template:
     metadata:
       labels:
-        app: ftps
+        run: ftps
     spec:
       containers:
       - name: ftps

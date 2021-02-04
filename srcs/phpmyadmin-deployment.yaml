@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: phpmyadmin-service
   labels:
-    app: phpmyadmin
+    run: phpmyadmin
 spec:
   selector:
-    app: phpmyadmin
+    run: phpmyadmin
   type: LoadBalancer
   ports:
   - name: phpmyadmin
@@ -20,16 +20,16 @@ kind: StatefulSet
 metadata:
   name: phpmyadmin-deployment
   labels:
-    app: phpmyadmin
+    run: phpmyadmin
 spec:
   serviceName: phpmyadmin
   selector:
     matchLabels:
-      app: phpmyadmin
+      run: phpmyadmin
   template:
     metadata:
       labels:
-        app: phpmyadmin
+        run: phpmyadmin
     spec:
       containers:
       - name: phpmyadmin
