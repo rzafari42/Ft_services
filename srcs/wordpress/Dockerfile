@@ -48,7 +48,7 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
     mv wp-cli.phar /usr/local/bin/wp
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./wordpress_config.php /var/www/wordpress/
+COPY ./wp_config.php /var/www/wordpress/
 
 RUN mkdir -p /var/log/supervisor/
 COPY ./supervisord.conf /etc/
