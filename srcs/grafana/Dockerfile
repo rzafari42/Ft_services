@@ -1,15 +1,15 @@
-FROM alpine:latest
+FROM alpine:3.12.3
 
 LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
 RUN apk update && \
-    apk add grafana --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+    apk add grafana --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/community
 
 RUN mkdir -p /var/log/supervisor/
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
-    apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+    apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 COPY ./grafana.ini /usr/share/grafana/conf/custom.ini
 COPY ./influxdb.yaml /usr/share/grafana/conf/provisioning/datasources/

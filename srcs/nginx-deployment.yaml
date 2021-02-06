@@ -3,7 +3,7 @@ kind: Service
 metadata:
  labels:
    run: nginx
- name: nginx-service
+ name: nginx
 spec:
   selector:
     run: nginx

@@ -1,4 +1,5 @@
-FROM alpine:latest
+FROM alpine:3.12.3
+
 LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
 RUN apk update && \

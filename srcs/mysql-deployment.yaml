@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     run: mysql
-  name: mysql-service
+  name: mysql
 spec:
   type: ClusterIP
   ports:

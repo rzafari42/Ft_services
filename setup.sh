@@ -46,6 +46,7 @@ kubectl delete -f ./srcs/metallb-conf.yaml; kubectl apply -f ./srcs/metallb-conf
 IP=$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p)
 echo "IP : ${IP}"
 
+kubectl apply -k ./srcs/
 #Set values for Database infos
 echo "Let's build the images ..."
 services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
@@ -56,7 +57,7 @@ do
 done
 echo "Images are built !"
 
-DB_NAME=wordpress; DB_USER=wp_user; DB_PASSWORD=password; DB_HOST=mysql-service;
+DB_NAME=wordpress; DB_USER=wp_user; DB_PASSWORD=password; DB_HOST=mysql;
 GRAFANA_USER=rzafari; GRAFANA_PASSWORD=idontknow;
 
 echo "Let's build the secrets ..."
@@ -67,9 +68,11 @@ kubectl create secret generic db-id-user \
         --from-literal=host=${DB_HOST}
 
 kubectl create secret generic rzafari \
-   --from-literal=user=${GRAFANA_USER} \
-   --from-literal=password=${GRAFANA_PASSWORD}
+   --from-literal=user="rzafari" \
+   --from-literal=password="mdp"
 echo "Secrets are built !"
+
+services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
 
 echo "Let's create and deploys services ..."
 for service in $services

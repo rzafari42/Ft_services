@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     run: influxdb
-  name: influxdb-service
+  name: influxdb
 spec:
   type: ClusterIP
   ports:
