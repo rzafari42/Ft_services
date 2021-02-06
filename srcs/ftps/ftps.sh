@@ -1,5 +1,6 @@
 #!/bin/sh
 
-{ echo "$FTP_USERNAME";echo "$FTP_PASSWORD"; } | adduser $FTP_USERNAME
+envsubst '$__CLUSTER_EXTERNAL_IP__' < /tmp/vsftpd.con > /etc/vsftpd/vsftpd.conf
+{ echo "$GRAFANA_USER";echo "$GRAFANA_PASSWORD"; } | adduser $GRAFANA_USER
 
 supervisord
