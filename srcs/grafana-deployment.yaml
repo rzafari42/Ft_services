@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: grafana
   labels:
     run: grafana
-  name: grafana
 spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.99.104
@@ -13,17 +13,16 @@ spec:
     name: http
   selector:
     run: grafana
-
 ---
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: grafana-deployment
+  name: grafana
   labels:
     run: grafana
 spec:
   serviceName: grafana
+  replicas: 1
   selector:
     matchLabels:
       run: grafana
@@ -42,10 +41,10 @@ spec:
             secretKeyRef:
               name: rzafari
               key: user
-        - name: GRAFANA_PASSWORD
+        - name: GRAFANA_PASS
           valueFrom:
             secretKeyRef:
               name: rzafari
               key: password
         ports:
-        - containerPort: 3000 
+        - containerPort: 3000
