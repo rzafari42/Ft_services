@@ -13,7 +13,9 @@ spec:
     name: http
   selector:
     run: grafana
+
 ---
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -41,7 +43,7 @@ spec:
             secretKeyRef:
               name: rzafari
               key: user
-        - name: GRAFANA_PASS
+        - name: GRAFANA_PASSWORD
           valueFrom:
             secretKeyRef:
               name: rzafari

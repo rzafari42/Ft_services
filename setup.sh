@@ -58,7 +58,6 @@ done
 echo "Images are built !"
 
 DB_NAME=wordpress; DB_USER=wp_user; DB_PASSWORD=password; DB_HOST=mysql;
-GRAFANA_USER=rzafari; GRAFANA_PASSWORD=idontknow;
 
 echo "Let's build the secrets ..."
 kubectl create secret generic db-id-user \
@@ -69,7 +68,7 @@ kubectl create secret generic db-id-user \
 
 kubectl create secret generic rzafari \
    --from-literal=user="rzafari" \
-   --from-literal=password="mdp"
+   --from-literal=password="idontknow"
 echo "Secrets are built !"
 
 services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
