@@ -20,7 +20,7 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     run: mysql
-  name: mysql-pv-claim
+  name: mysql-pvc
 spec:
   accessModes:
   - ReadWriteOnce
@@ -79,5 +79,5 @@ spec:
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: mysql-pvc
           
