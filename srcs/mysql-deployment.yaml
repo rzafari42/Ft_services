@@ -31,13 +31,13 @@ spec:
 ---
 
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   labels:
     run: mysql
-  name: mysql
+  name: mysql-deployment
 spec:
-  serviceName: mysql
+  replicas: 1
   selector:
     matchLabels:
       run: mysql

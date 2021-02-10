@@ -20,12 +20,13 @@ spec:
 ---
 
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: ftps-deployment
   labels:
     run: ftps
 spec:
+  replicas: 1
   selector:
     matchLabels:
       run: ftps

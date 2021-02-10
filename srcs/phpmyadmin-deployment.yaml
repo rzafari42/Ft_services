@@ -17,13 +17,13 @@ spec:
 ---
 
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: phpmyadmin-deployment
   labels:
     run: phpmyadmin
 spec:
-  serviceName: phpmyadmin
+  replicas: 1
   selector:
     matchLabels:
       run: phpmyadmin
