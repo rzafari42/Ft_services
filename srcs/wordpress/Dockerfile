@@ -43,12 +43,12 @@ RUN wget https://wordpress.org/${WP_FILE} && \
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
     apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-    chmod +x wp-cli.phar && \
-    mv wp-cli.phar /usr/local/bin/wp
+#RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+#    chmod +x wp-cli.phar && \
+#    mv wp-cli.phar /usr/local/bin/wp
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./wp_config.php /var/www/wordpress/
+COPY ./wp_config.php /var/www/wordpress/wp-config.php
 
 RUN mkdir -p /var/log/supervisor/
 COPY ./supervisord.conf /etc/
