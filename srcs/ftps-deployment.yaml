@@ -6,7 +6,7 @@ metadata:
     run: ftps
 spec:
   type: LoadBalancer
-  loadBalancerIP: 192.168.99.102
+  loadBalancerIP: 192.168.99.101
   ports:
   - port: 30000
     protocol: TCP
@@ -16,6 +16,21 @@ spec:
     name: my-ftps
   selector:
     run: ftps
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    run: ftps
+  name: ftps-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
 
 ---
 
@@ -39,17 +54,13 @@ spec:
       - name: ftps
         image: ftps-img
         imagePullPolicy: Never
-        env:
-        - name: GRAFANA_USER
-          valueFrom:
-            secretKeyRef:
-              name: rzafari
-              key: user
-        - name: GRAFANA_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: rzafari
-              key: password
         ports:
         - containerPort: 21
         - containerPort: 30000
+        volumeMounts:
+        - name: ftps-persitent-storage
+          mountPath: var/lib/ftps
+      volumes:
+      - name: ftps-persitent-storage
+        persistentVolumeClaim:
+          claimName: ftps-pvc

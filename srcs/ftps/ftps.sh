@@ -1,6 +1,8 @@
 #!/bin/sh
 
-envsubst '$__CLUSTER_EXTERNAL_IP__' < /tmp/vsftpd.con > /etc/vsftpd/vsftpd.conf
-{ echo "$GRAFANA_USER";echo "$GRAFANA_PASSWORD"; } | adduser $GRAFANA_USER
+export FTPS_USER=rzafari;
+export FTPS_PASSWORD=password;
+
+echo -e "$FTPS_PASSWORD\n$FTPS_PASSWORD" | adduser -h /mnt/ftp $FTPS_USER
 
 supervisord
