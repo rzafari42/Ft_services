@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export  user=username
+export  user=username;
 export  user_pass=;
 
 adduser -D ${user};

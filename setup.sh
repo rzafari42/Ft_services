@@ -53,7 +53,7 @@ services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
 
 for service in $services
 do
-    docker build -t $service-img srcs/$service --network=host #2>/dev/null 1>&2
+    docker build -t $service-img srcs/$service 2>/dev/null 1>&2
 done
 echo "Images are built !"
 
