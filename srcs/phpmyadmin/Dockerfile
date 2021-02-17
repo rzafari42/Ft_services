@@ -19,7 +19,7 @@ RUN wget http://files.directadmin.com/services/all/phpMyAdmin/${PMA_FILE}.tar.gz
     mv ${PMA_FILE} /var/www/phpmyadmin && \
     rm -rf $(PMA_FILE)
     
-RUN openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
+RUN mkdir /etc/nginx/ssl/ && openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
     -keyout /etc/nginx/ssl/nginx-cert.key -out /etc/nginx/ssl/nginx-cert.crt
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
@@ -28,7 +28,6 @@ RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./Mypma_config.php /var/www/phpmyadmin/config.inc.php
 
-#RUN mkdir -p /var/log/supervisor/
 COPY ./supervisord.conf /etc/supervisord.conf
 COPY ./Mypma.sh  .
 RUN chmod +x ./Mypma.sh
