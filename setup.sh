@@ -40,14 +40,14 @@ echo "Installing MetalLB ..."
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
 # On first install only
-kubectl create secret generic -n metallb-system memberlist \
---from-literal=secretkey="$(openssl rand -base64 128)"
-kubectl delete -f ./srcs/metallb-conf.yaml; kubectl apply -f ./srcs/metallb-conf.yaml
+kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+#kubectl delete -f ./srcs/metallb-conf.yaml; kubectl apply -f /srcs/metallb-conf.yaml
 #Catch the LB IP and print it
-IP=$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p)
+kubectl create -f ./srcs/metallb-conf.yaml 2>/dev/null 1>&2
+
+export IP=`minikube ip`
 echo "IP : ${IP}"
 
-kubectl apply -k ./srcs/
 #Set values for Database infos
 echo "Let's build the images ..."
 services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
