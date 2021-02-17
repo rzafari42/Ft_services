@@ -20,7 +20,7 @@ RUN wget http://files.directadmin.com/services/all/phpMyAdmin/${PMA_FILE}.tar.gz
     rm -rf $(PMA_FILE)
     
 RUN openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
-    -keyout /etc/ssl/nginx-cert.key -out /etc/ssl/nginx-cert.crt
+    -keyout /etc/nginx/ssl/nginx-cert.key -out /etc/nginx/ssl/nginx-cert.crt
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
     apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
