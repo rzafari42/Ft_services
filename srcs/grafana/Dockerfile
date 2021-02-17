@@ -4,7 +4,7 @@ LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.13/community" >> /etc/apk/repositories
 RUN apk update && \
-    apk add grafana --repository http://dl-cdn.alpinelinux.org/alpine/v.3.13/community/ --no-cache
+    apk add grafana --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ --no-cache
 
 RUN mkdir -p /var/log/supervisor/
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \

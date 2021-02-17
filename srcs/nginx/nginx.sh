@@ -7,3 +7,4 @@ adduser -D ${user};
 echo "${user}:${$user_pass}" | chpasswd
 
 supervisord
+tail -f /edv/null

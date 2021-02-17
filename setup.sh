@@ -5,13 +5,14 @@ if ! which conntrack &>/dev/null; then
 fi
 
 if ! kubectl version &>/dev/null; then
-    sudo service nginx stop
+    service nginx stop
     echo "Starting minikube..."
-    sudo minikube start --driver=none
+    minikube start --driver=docker
 fi
 
-sudo chown -R user42 $HOME/.kube $HOME/.minikube
+eval $(minikube docker-env)
 
+sudo chown -R user42 $HOME/.kube $HOME/.minikube
 
 echo "Let's delete some old things ..."
 kubectl delete --all deployment
@@ -71,7 +72,6 @@ kubectl create secret generic rzafari \
    --from-literal=password="idontknow"
 echo "Secrets are built !"
 
-services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
 
 echo "Let's create and deploys services ..."
 for service in $services
@@ -83,4 +83,4 @@ done
 echo "Done ! :)"
 
 echo "About to open the dashboard ..."
-sudo minikube dashboard
+minikube dashboard &
