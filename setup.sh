@@ -4,6 +4,9 @@ if ! which conntrack &>/dev/null; then
     sudo apt-get install -y conntrack
 fi
 
+minikube stop
+minikube delete
+
 if ! kubectl version &>/dev/null; then
     service nginx stop
     echo "Starting minikube..."

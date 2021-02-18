@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: influxdb
   annotations:
-    metallb.universe.tf/allow-shared-ip: shared
+    metallb.universe.tf/allow-shared-ip: "sharing key"
   labels:
     run: influxdb
 spec:

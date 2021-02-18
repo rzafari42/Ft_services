@@ -36,8 +36,8 @@ ARG WP_VERSION="5.5"
 ARG WP_FILE="wordpress-${WP_VERSION}.tar.gz"
 RUN wget https://wordpress.org/${WP_FILE} && \
     tar -xf ${WP_FILE} && \
-    mv wordpress /var/www/ && \
-	rm -rf ${WP_FILE}
+    mv wordpress /var/www/
+	#rm -rf ${WP_FILE}
     
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \

@@ -9,7 +9,7 @@ RUN openssl req -x509 -days 365 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafar
     -newkey rsa:2048  -out /etc/ssl/certs/vsftpd.crt -keyout /etc/ssl/private/vsftpd.key
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
-    apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+    apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 COPY ./hello.txt /home/user/hello.txt
 COPY ./vsftpd.conf /etc/vsftpd/

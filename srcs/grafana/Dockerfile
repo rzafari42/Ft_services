@@ -12,8 +12,7 @@ RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && 
 
 COPY ./grafana.ini /usr/share/grafana/conf/custom.ini
 COPY ./influxdb.yaml /usr/share/grafana/conf/provisioning/datasources/
-COPY ./dashboard.yaml /usr/share/grafana/conf/provisioning/dashboards/
-COPY ./dashboards /var/lib/grafana/dashboards/
+COPY ./dashboards/grafana.db /var/lib/grafana/data/
 
 RUN mkdir -p /var/log/supervisor/
 COPY ./supervisord.conf /etc/
