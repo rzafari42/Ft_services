@@ -36,16 +36,12 @@ ARG WP_VERSION="5.5"
 ARG WP_FILE="wordpress-${WP_VERSION}.tar.gz"
 RUN wget https://wordpress.org/${WP_FILE} && \
     tar -xf ${WP_FILE} && \
-    mv wordpress /var/www/
-	#rm -rf ${WP_FILE}
+    mv wordpress /var/www/wordpress
     
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
     apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
-#RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-#    chmod +x wp-cli.phar && \
-#    mv wp-cli.phar /usr/local/bin/wp
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./wp_config.php /var/www/wordpress/wp-config.php

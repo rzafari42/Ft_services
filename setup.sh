@@ -57,7 +57,7 @@ services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
 
 for service in $services
 do
-    docker build -t $service-img srcs/$service #2>/dev/null 1>&2
+    docker build -t $service-img srcs/$service 2>/dev/null 1>&2
 done
 echo "Images are built !"
 
@@ -80,7 +80,7 @@ echo "Let's create and deploys services ..."
 for service in $services
 do
     echo "$service ..."
-    kubectl create -f ./srcs/$service-deployment.yaml 2>/dev/null 1>&2
+    kubectl create -f ./srcs/$service.yaml 2>/dev/null 1>&2
     echo "$service done"
 done
 echo "Done ! :)"
