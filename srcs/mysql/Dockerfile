@@ -16,8 +16,6 @@ COPY ./supervisord.conf /etc/
 COPY mysql.sql ./mysql.sql
 COPY mysql.sh ./mysql.sh
 COPY ./my.cnf /etc/my.cnf.d/mariadb-server.cnf
-#RUN mkdir /etc/telegraf/
-#COPY telegraf.conf /etc/telegraf/telegraf.conf
 RUN chmod +x ./mysql.sh
 
 EXPOSE 3306
