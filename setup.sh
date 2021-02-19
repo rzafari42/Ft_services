@@ -80,7 +80,7 @@ echo "Let's create and deploys services ..."
 for service in $services
 do
     echo "$service ..."
-    kubectl create -f ./srcs/$service.yaml 2>/dev/null 1>&2
+    kubectl apply -f ./srcs/$service.yaml 2>/dev/null 1>&2
     echo "$service done"
 done
 echo "Done ! :)"

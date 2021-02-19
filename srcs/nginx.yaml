@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: nginx
   annotations:
-    metallb.universe.tf/allow-shared-ip: "sharing key"
+    metallb.universe.tf/allow-shared-ip: shared
   labels:
     run: nginx
 spec:
