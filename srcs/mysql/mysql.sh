@@ -22,7 +22,7 @@ FLUSH PRIVILEGES;"
 if [ ! -f /var/lib/mysql/wpNewUsers ]; then
     echo "done" >> /var/lib/mysql/wpNewUsers
     mysql -h localhost -e "$(cat $tmp)"
-    mysql -h localhost -e "$(cat ./mysql.sql)"
+    mysql wordpress -u root < wordpress.sql
 fi
 
 mkdir -p /etc/telegraf

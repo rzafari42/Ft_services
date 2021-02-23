@@ -37,7 +37,7 @@ kind: Deployment
 metadata:
   labels:
     run: mysql
-  name: mysql-deployment
+  name: mysql
 spec:
   replicas: 1
   selector:
@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql-img
+        image: mysql
         imagePullPolicy: Never
         env:
         - name: DB_NAME

@@ -38,7 +38,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ftps-deployment
+  name: ftps
   labels:
     run: ftps
 spec:
@@ -53,7 +53,7 @@ spec:
     spec:
       containers:
       - name: ftps
-        image: ftps-img
+        image: ftps
         imagePullPolicy: Never
         ports:
         - containerPort: 21

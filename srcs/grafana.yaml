@@ -20,7 +20,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grafana-deployment
+  name: grafana
   labels:
     run: grafana
 spec:
@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: grafana-img
+        image: grafana
         imagePullPolicy: Never
         env:
         - name: GRAFANA_USER

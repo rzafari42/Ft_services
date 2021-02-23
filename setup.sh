@@ -48,16 +48,17 @@ kubectl create secret generic -n metallb-system memberlist --from-literal=secret
 #Catch the LB IP and print it
 kubectl create -f ./srcs/metallb-conf.yaml 2>/dev/null 1>&2
 
-export IP=`minikube ip`
+export IP=$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p)
 echo "IP : ${IP}"
 
+envsubst '$IP' < srcs/metallb-conf.yaml
 #Set values for Database infos
 echo "Let's build the images ..."
 services=(nginx ftps mysql phpmyadmin wordpress grafana influxdb)
 
 for service in $services
 do
-    docker build -t $service-img srcs/$service 2>/dev/null 1>&2
+    docker build -t $service srcs/$service #2>/dev/null 1>&2
 done
 echo "Images are built !"
 

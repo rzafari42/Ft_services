@@ -21,7 +21,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: phpmyadmin-deployment
+  name: phpmyadmin
   labels:
     run: phpmyadmin
 spec:
@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: phpmyadmin
-        image: phpmyadmin-img
+        image: phpmyadmin
         imagePullPolicy: Never
         env:
         - name: DB_HOST

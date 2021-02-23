@@ -35,7 +35,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress-deployment
+  name: wordpress
   labels:
     run: wordpress
 spec:
@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: wordpress-img
+        image: wordpress
         imagePullPolicy: Never
         env:
         - name: DB_NAME

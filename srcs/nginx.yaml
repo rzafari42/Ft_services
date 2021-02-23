@@ -25,7 +25,7 @@ spec:
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx
   labels:
     run: nginx
 spec:
@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx-img
+        image: nginx
         imagePullPolicy: Never
         ports:
         - containerPort: 80

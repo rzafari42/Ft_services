@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: influxdb
   annotations:
-    metallb.universe.tf/allow-shared-ip: "sharing key"
+    metallb.universe.tf/allow-shared-ip: shared
   labels:
     run: influxdb
 spec:
@@ -38,7 +38,7 @@ kind: Deployment
 metadata:
   labels:
     run: influxdb
-  name: influxdb-deployment
+  name: influxdb
 spec:
   replicas: 1
   selector:
@@ -51,7 +51,7 @@ spec:
     spec:
       containers:
       - name: influxdb
-        image: influxdb-img
+        image: influxdb
         imagePullPolicy: Never 
         ports:
         - containerPort: 8086
