@@ -10,7 +10,7 @@ sed -i s/'# urls = \["http:\/\/127.0.0.1:8086"\]'/'urls = ["http:\/\/influxdb:80
 sed -i s/'# database = "telegraf"'/'database = "wordpress"'/ /etc/telegraf/telegraf.conf
 sed -i s/'omit_hostname = false'/'omit_hostname = true'/ /etc/telegraf/telegraf.conf
 
-rm -rf /var/www/html/wordpress
-mv /var/www/wordpress/ /var/www/html
+#rm -rf /var/www/html/wordpress
+mv /var/www/wordpress/ /var/www/html/wordpress
 
 supervisord

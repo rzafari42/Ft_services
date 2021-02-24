@@ -37,10 +37,7 @@ RUN mkdir -p /run/nginx/
 ARG WP_FILE="wordpress-5.5.tar.gz"
 RUN wget https://wordpress.org/${WP_FILE} && \
     tar -xf ${WP_FILE} && \
-    mv wordpress /var/www/wordpress/
-
-#RUN mkdir -p /etc/nginx/ssl && openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
- #  -keyout /etc/nginx/ssl/nginx-cert.key -out /etc/nginx/ssl/nginx-cert.crt
+    mv wordpress /var/www/
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
     apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
@@ -55,4 +52,5 @@ COPY wp.sh ./wp.sh
 RUN chmod +x ./wp.sh
 
 EXPOSE 5050
-ENTRYPOINT ./wp.sh
+#ENTRYPOINT ./wp.sh
+CMD ["./wp.sh"]

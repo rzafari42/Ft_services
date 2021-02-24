@@ -9,7 +9,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - name: wordpress
+  - name: https
     port: 5050
     targetPort: 5050
   selector:
@@ -75,7 +75,6 @@ spec:
               key: host
         ports:
         - containerPort: 5050
-          name: wordpress
         volumeMounts:
         - name: wordpress-persistent-storage
           mountPath: /var/www/html
