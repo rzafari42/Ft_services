@@ -4,6 +4,7 @@ LABEL maintainer="rzafari <rzafari@students.42.us.org>"
 
 RUN apk update && \
     apk add --no-cache nginx && \
+    apk add openssl && \
     apk add php-fpm \
     php7-fpm \
     php7-json \
@@ -32,15 +33,14 @@ RUN apk update && \
 
 #We need to creat the folder /run/nginx to get nginx to work correctly so it can assign a PID number to the directory
 RUN mkdir -p /run/nginx/
-ARG WP_VERSION="5.5"
-ARG WP_FILE="wordpress-${WP_VERSION}.tar.gz"
+
+ARG WP_FILE="wordpress-5.5.tar.gz"
 RUN wget https://wordpress.org/${WP_FILE} && \
     tar -xf ${WP_FILE} && \
-    rm -rf ${WP_FILE} && \
-    mv wordpress /var/www/wordpress
+    mv wordpress /var/www/wordpress/
 
 #RUN mkdir -p /etc/nginx/ssl && openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
-#   -keyout /etc/nginx/ssl/nginx-cert.key -out /etc/nginx/ssl/nginx-cert.crt
+ #  -keyout /etc/nginx/ssl/nginx-cert.key -out /etc/nginx/ssl/nginx-cert.crt
 
 RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
     apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community

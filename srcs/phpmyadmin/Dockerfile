@@ -16,8 +16,7 @@ RUN mkdir -p /run/nginx/
 ARG PMA_FILE="phpMyAdmin-5.0.2-all-languages"
 RUN wget http://files.directadmin.com/services/all/phpMyAdmin/${PMA_FILE}.tar.gz && \
     tar -xf ${PMA_FILE}.tar.gz && \
-    mv ${PMA_FILE} /var/www/phpmyadmin && \
-    rm -rf $(PMA_FILE)
+    mv ${PMA_FILE} /var/www/phpmyadmin
     
 RUN mkdir /etc/nginx/ssl/ && openssl req -x509 -days 365 -newkey rsa:2048 -nodes -subj "/C=FR/ST=75/L=Paris/O=42/CN=rzafari_ft_service" \
     -keyout /etc/nginx/ssl/nginx-cert.key -out /etc/nginx/ssl/nginx-cert.crt
