@@ -52,5 +52,4 @@ COPY wp.sh ./wp.sh
 RUN chmod +x ./wp.sh
 
 EXPOSE 5050
-#ENTRYPOINT ./wp.sh
-CMD ["./wp.sh"]
+ENTRYPOINT ./wp.sh
