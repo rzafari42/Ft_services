@@ -23,9 +23,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: ftps-pvc
   labels:
     run: ftps
-  name: ftps-pvc
 spec:
   accessModes:
   - ReadWriteOnce
@@ -59,9 +59,9 @@ spec:
         - containerPort: 21
         - containerPort: 30000
         volumeMounts:
-        - name: ftps-persitent-storage
+        - name: ftps-persistent-storage
           mountPath: var/lib/ftps
       volumes:
-      - name: ftps-persitent-storage
+      - name: ftps-persistent-storage
         persistentVolumeClaim:
           claimName: ftps-pvc
