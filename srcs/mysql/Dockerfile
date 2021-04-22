@@ -6,12 +6,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repos
 RUN apk update && \
 	apk add mariadb mariadb-client mariadb-common --no-cache
 
-RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
-	apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
-
-
-RUN mkdir -p /var/log/supervisor/
-COPY ./supervisord.conf /etc/
+RUN apk update && apk upgrade && apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 COPY wordpress.sql ./wordpress.sql
 COPY mysql.sh ./mysql.sh

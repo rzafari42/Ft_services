@@ -6,16 +6,12 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.13/community" >> /etc/apk/repo
 RUN apk update && \
     apk add grafana --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ --no-cache
 
-RUN mkdir -p /var/log/supervisor/
-RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
-    apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ --no-cache
+RUN apk update && apk upgrade && apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ --no-cache
 
 COPY ./grafana.ini /usr/share/grafana/conf/custom.ini
-COPY ./influxdb.yaml /usr/share/grafana/conf/provisioning/datasources/
+#COPY ./influxdb.yaml /usr/share/grafana/conf/provisioning/datasources/
 COPY ./dashboards/grafana.db /var/lib/grafana/data/
 
-RUN mkdir -p /var/log/supervisor/
-COPY ./supervisord.conf /etc/
 COPY ./grafana.sh .
 RUN chmod +x ./grafana.sh
 

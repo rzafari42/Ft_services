@@ -36,4 +36,16 @@ rm -f $tmp
 
 /usr/shar/mariadb/mysql.server stop
 
-supervisord
+mysqld --default-authentication-plugin=mysql_native_password &
+telegraf &
+
+while sleep 60; do 
+    ps aux | grep telegraf | grep -q -v grep
+    PROCESS_1_STATUS=$?
+    ps aux | grep mysqld | grep -q -v grep
+    PROCESS_2_STATUS=$?
+    if [ $PROCESS_1_STATUS -ne 0 -o $PROCESS_2_STATUS -ne 0 ]; then
+        echo "One of the process has already exited."
+        exit 1
+    fi 
+done

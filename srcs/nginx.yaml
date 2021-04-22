@@ -12,11 +12,11 @@ spec:
   type: LoadBalancer
   ports:
   - port: 80
-    name: http
+    name: http-port
     targetPort: 80
     protocol: TCP
   - port: 443
-    name: https
+    name: https-port
     targetPort: 443
     protocol: TCP
 
@@ -29,8 +29,7 @@ metadata:
   labels:
     run: nginx
 spec:
-  replicas: 2
-  selector: 
+  selector:
     matchLabels:
       run: nginx
   template:
@@ -44,3 +43,6 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 80
+          name: http-port
+        - containerPort: 443
+          name: https-port
