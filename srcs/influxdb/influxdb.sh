@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 mkdir -p /etc/telegraf
 telegraf -sample-config --input-filter cpu:mem:net:swap:diskio --output-filter influxdb > /etc/telegraf/telegraf.conf
 sed -i s/'# database = "telegraf"'/'database = "influxdb"'/ /etc/telegraf/telegraf.conf
