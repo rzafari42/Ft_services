@@ -39,15 +39,12 @@ RUN wget https://wordpress.org/${WP_FILE} && \
     tar -xf ${WP_FILE} && \
     mv wordpress /var/www/
 
-RUN apk update && apk upgrade && apk add --no-cache vim supervisor wget curl && \
-    apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+RUN apk update && apk upgrade && apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./wp_config.php /var/www/wordpress/wp-config.php
 
-RUN mkdir -p /var/log/supervisor/
-COPY ./supervisord.conf /etc/
 COPY wp.sh ./wp.sh
 RUN chmod +x ./wp.sh
 
